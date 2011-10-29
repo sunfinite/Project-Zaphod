@@ -1,0 +1,62 @@
+<html>
+	<head>
+		<title>	
+			Project Zaphod
+		</title>
+		<style type = "text/css">
+			body {
+				font-family: Arial;
+				text-align: center;
+				font-size: 25pt;
+			}
+			h1 {
+				text-align: center;
+				font-size: 88pt;
+				color: #424242;
+			}
+
+			#guide {
+				height: 50%;
+			}
+			table { 
+				margin: 0px auto;
+			}
+
+			table td {
+				padding: 15px;
+			}
+			
+
+			button, select {
+				text-align: center;
+				font-size: 13pt;
+			}
+			button {
+				width: 145px;
+				height: 30px;
+			}
+			#projects {
+				border-left: 2px black solid;
+			}
+				</style>
+	</head>
+	<body>
+		<div id = "guide">
+		<h1>DON'T PANIC</h1>
+		</div>
+		<table> 
+			<tr><td>
+		<select onchange = "course = this.options[this.selectedIndex].value; if (course != 'noredirect') window.location = course + '/'">
+		<option value = "noredirect"> Select a course </option>	
+		{% for course in courses %}
+		<option value = {{course.code }}>{{course.title}}</option>  
+		{% endfor %}
+		</select>
+		</td><td id = "projects">
+		<button onclick = "window.location = 'projects/'" >Projects</button>
+
+	</td>
+	</tr>
+	</table>
+	</body>
+</html>	

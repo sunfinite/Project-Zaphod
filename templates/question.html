@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<title> Project Zaphod </title>
+		<link rel = "stylesheet" type = "text/css" href = "/static/css/thread.css">
+			{% include "formcss.html" %} 
+		<script type = "text/javascript">
+			$(document).ready(function() {
+				$('#reply').unbind('click').click(function() {
+					$('.form').animate({'opacity': 'toggle'});		
+					$(this).hide();
+				});
+
+				$('#hide').unbind('click').click(function() {
+					$('.form').hide('medium');
+					$('#reply').show();
+				});	
+			});
+		</script>
+	</head>
+	<body>
+		{% load markup %}
+	<table class = "thread">
+			<tr> <td>
+		<table class = "postcontainer ">
+			<tr><td>
+			<p class = "breadcrumbs"><a  href = "/"> Courses </a>&raquo;<a href = {% url views.renderCoursePage code%}>{{code}}</a></p>
+	</td></tr>
+			<tr> <td class = "post original">
+				{{ question.content|markdown:'codehilite(force_linenos=True)' }} 	
+			</td></tr>
+			<tr><td>
+					<p class = "timestamp"> <em>Asked:</em> {{ question.datePosted }} 	
+					{% if question.dateEdited %}
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 <em>Edited:</em> {{ question.dateEdited }}
+			{% endif %}
+		        	
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a  class = "edit" href = {% url views.questionForm code 0 question.id %}>Edit</a></p>
+
+				</td>	
+			</tr>
+		</table>
+
+			</tr></td>
+						<tr> <td>
+				{% include "replyform.html" with code=code objId=question.id replyFor=1 replyId=0 %}
+
+				</tr></td>
+				<tr> <td>
+					<button id = "reply">Reply to this question</button>
+			</tr></td>
+
+			<tr> <td>
+			<div class = "replycount"> {{ question.replyCount }} Replies </div>
+			</td> </tr>
+
+			<tr> <td>
+		{%  for reply in replies %}
+		<table class = "postcontainer reply">
+			<tr> <td>
+			<div class = "post">
+				{{ reply.content|markdown:'codehilite(force_linenos=True)' }} 
+			</div>
+			</td> </tr>
+			<tr> <td>
+					<p class = "timestamp"><em>Replied:</em> {{ reply.datePosted }} 				
+			{% if reply.dateEdited %}
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 <em>Edited:</em> {{ reply.dateEdited }}
+			{% endif %}
+		        	
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a  class = "edit" href = {% url views.replyForm code question.id 1 reply.id %}>Edit</a></p>
+				</td>	
+
+			</tr>
+		</table>
+		{% endfor %}
+			</td></tr>
+	</table>
+	</body>
+</html>

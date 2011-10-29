@@ -1,0 +1,30 @@
+<html>
+	<head> 
+		<title>
+			Add Course
+		</title>
+		{% include "formcss.html" %}
+	</head>
+
+	<body>	
+		<br />
+		<br />
+		<div class = "form">
+			<form id = "course_form" method = "POST" action = {% url views.courseForm courseId %} autocomplete = "off">	
+			<p> Code</p> <input type = "text" name = "code" value = {{ course.code }}>
+			<p> Title</p> <input type = "text" name = "title" value = {{ course.title }}>
+			<p> Teacher</p>  <input type = "text" name = "teacher" value = {{ course.teacher }}>
+			<p> Admin. Password</p>  <input type = "password" name = "password">
+			<br />
+			<br />
+			<input id = "submit"  type = "submit" value = "submit">
+		</form>
+					
+		</div>
+		{% if message %}
+			<p id = "error">{{ message }}</p>
+		{% endif %}
+
+	</body>
+</html>
+

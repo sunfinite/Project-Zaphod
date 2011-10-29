@@ -1,0 +1,31 @@
+{% if replyId %}
+<html>
+		<head>
+			<title>
+				Project Zaphod-Edit Reply
+			</title>
+		{% include "formcss.html" %}
+		</head>
+{% endif %}	
+<div id = "mask"> </div>
+<div id = "previewcontainer"><div id = "previewdata"> </div> <img src = "/static/images/close.gif" id = "close"/> </div>
+
+<div class = "form">
+	<form name = "reply" method = "POST" action = {%url views.replyForm code objId replyFor replyId %}>
+	<textarea name = "content" id = "textarea">{{ reply.content }}</textarea>
+	<p> Password </p>
+	<input type = "password" name = "password">
+	<br />
+	<br />
+	<input type = "submit" value = {% if not reply %} "reply" {% else %} "done" {% endif %} id = "submit"> 
+	<input type = "submit" class = "preview" id = "preview" value = "preview"> 
+	<br />
+	{% if not reply %} 
+		<a id = "hide" href = "javascript:void(0)" class = "links">Hide</a>
+	{% endif %}
+</form>
+</div>
+
+{% if replyId %}
+</html>
+{% endif %}

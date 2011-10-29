@@ -1,0 +1,178 @@
+<html>
+	<head>
+		<title>
+			Project Zaphod - Project {{ project.id }}
+		</title>
+		{% include "formcss.html" %}
+		<style type = "text/css">
+			table {
+				width: 700px;
+			}
+			.form { 
+				display: none;
+				float: left;
+			}
+			a {
+				color: black;
+			}
+			#main {
+				margin-top: 10%;
+				margin-left: 5%;
+			}
+			table p {
+				font-size: 12pt;
+			}
+			#title p{
+				font-size: 15pt;	
+			}
+			#title {
+				background-color: #F3F3F3;
+			}
+			#meetings {
+				padding-top: 10px;
+			}
+			.header {
+				float: left;
+				font-weight: bolder;
+			}
+			.tools p {
+				padding-left: 0px;
+			}
+			em {
+				font-size: 9pt;
+			}
+			.entry {
+				background-color: #E8E8E8;
+				padding-top: 5px;
+				padding-left: 3px;
+			}
+			
+		</style>
+		<script type = "text/javascript">
+			$(document).ready(function() {
+				$('#addtool').unbind('click').click(function() {
+					$('#toolform').animate({'opacity': 'toggle'});		
+					$(this).hide();
+				});
+
+				$('#hidetool').unbind('click').click(function() {
+					$('#toolform').hide('medium');
+					$('#addtool').show();
+				});	
+
+				$('#addmilestone').unbind('click').click(function() {
+					$('#milestoneform').animate({'opacity': 'toggle'});		
+					$(this).hide();
+				});
+
+				$('#hidemilestone').unbind('click').click(function() {
+					$('#milestoneform').hide('medium');
+					$('#addmilestone').show();
+				});	
+
+				$('#addlogentry').unbind('click').click(function() {
+					$('#logform').animate({'opacity': 'toggle'});		
+					$(this).hide();
+				});
+
+				$('#hidelogform').unbind('click').click(function() {
+					$('#logform').hide('medium');
+					$('#addlogentry').show();
+				});	
+
+			});
+		</script>
+
+	</head>
+
+	{% load custom_filters %}
+	{% load markup %}
+		<table id = "main">
+		<tr><td  id = "title">
+		<p>{{ project.title }}</p>
+		</td></tr>
+		<tr><td>
+		<ul id = "members">
+		{% for member in members %}
+		<li>{{ member.name }}</li>
+		{% endfor %}
+		</ul>
+		</td></tr>
+		<!--
+		<tr><td id = "abstract">
+			Abstract
+		</td></tr>
+		-->
+		<tr><td>
+		<p id = "guide"><span class = "header">Guide:</span> &nbsp;&nbsp; {% if project.id != 1729 %} {{ project.guide.name }} {% else %} 42 {% endif %}</p>
+		</td></tr>
+		<tr><td>
+		<p id = "meetings"> <span class = "header">Guide Meetings:</span>&nbsp;&nbsp; 0</p>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<button id = "private" onclick = "alert('coming soon to a web page near you')">Private Log</button>
+		</tr></td>
+		<tr><td class = "tools">
+		<p>
+		<span class = "header"> Tools: </span>
+		 {% for tool in project.tools|manyToManyIterator %}
+			&nbsp;&nbsp; <a href = "#">{{ tool.name }},</a> </p>
+		{% empty %}
+			<p>To be added</p>
+		{% endfor %}
+		</td></tr>
+		<tr><td>
+		<a href = "#" id = "addtool">Add</a>
+		{% include 'toolform.html' with projectId=project.id %}
+		</td></tr>
+		<tr><td>
+		<p>
+		{{ here }} 
+		<span class = "header">Current Task:</span> &nbsp;&nbsp;
+		{{milestones|currentTask }}</p>
+		</td></tr>
+		<tr><td class = "milestones">
+		<span class = "header">Milestones:</span>
+		<table>
+		{% for milestone in milestones %}
+		   <tr><td>
+		   <p>{{forloop.counter}}. {{ milestone.description }}<br /> 
+			<em>ETA: {{ milestone.estimate|date:"j/n/Y" }}</em></p>
+		   </td></tr>
+		{% empty %}
+		<tr><td>
+			<p> To be added </p>
+		</td></tr>
+		{% endfor %}
+		</table>
+		</tr></td>
+		<tr><td>
+		<a href = "#" id = "addmilestone">Add</a>
+		{% include 'milestoneform.html' with projectId=project.id %}
+		</td></tr>
+		<tr><td>
+		<p>
+		<span class = "header"> Public Log: </span><br /><br />
+		<button id = "addlogentry"> Write </button>
+		</p>
+		{% include 'logform.html' with projectId=project.id %}
+		</td></tr>
+		<tr><td>
+		<table>
+		 {% for entry in  log %}
+			<tr><td class = "entry">	
+				{{ entry.content|markdown:'codehilite'}}
+			</td></tr>
+			<tr><td>	
+				<em>Posted: {{ entry.datePosted }}</em><br /><br />
+			</td></tr>
+		{% empty %}
+			<tr><td> No log entries </tr></td>
+		{% endfor %}
+		</table>
+		</td></tr>
+		</table>
+		
+		{% if message %}
+		<p id = "message">{{ message }}</p>
+		{% endif %}
+</html>

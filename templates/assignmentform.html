@@ -1,0 +1,36 @@
+{% if standalone %}
+<head>
+	<title> 
+		Project Zaphod - {{ code }}
+	</title>
+	{% include "formcss.html" %}
+</head>
+<div id = "mask"> </div>
+<div id = "previewcontainer"><div id = "previewdata"> </div> <img src = "/static/images/close.gif" id = "close"/> </div>
+
+{% endif %}
+<div class = "form">
+	<form method = "POST" action = {%url views.assignmentForm code class assignmentId %}>
+	<p> Description </p>
+	<textarea name = "description" id = "assignmentarea">{{ assignment.description }}</textarea>
+	<br />
+	<br />
+	{% include "standalone.html" %}
+	<br />
+	<div class = "checkboxcontainer">
+		<label for = "checkbox">Has a submission date </label>
+		<input type = "checkbox" name = "submission" value = 1  class = "checkbox" {% if assignment.submissionDate %} checked {% endif %}>
+	</div>
+	<br />
+	{% include "date.html" %}
+	<p>Password</p>
+	<input type = "password" name = "password">
+	<br />
+	<br />
+	<input type = "submit" value = {% if not assignment %} "start" {% else %} "done" {% endif %} id = "submit">
+	<input type = "submit" class = "preview" value = "preview" id = "assignmentpreview"> 
+	{% if message %}
+	<p id = "error">{{ message }}</p>
+	{% endif %}
+</form>
+</div>

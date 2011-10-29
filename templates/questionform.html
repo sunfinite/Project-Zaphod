@@ -1,0 +1,31 @@
+{% if standalone %}
+<head>
+	<title> 
+		Project Zaphod - {{ code }}
+	</title>
+	{% include "formcss.html" %}
+</head>
+
+<div id = "mask"> </div>
+<div id = "previewcontainer"><div id = "previewdata"> </div> <img src = "/static/images/close.gif" id = "close"/> </div>
+
+{% endif %}
+<div class = "form">
+	<form method = "POST" action = {%url views.questionForm code class questionId %} autocomplete = "off">
+	<p> Question </p>
+	<textarea name = "content" id = "questionarea">{{ question.content }}</textarea>
+	<br />
+	<br />
+	{% include "standalone.html" %}
+	<p> Password </p><input type = "password" name = "password">
+	<br />
+	<br />
+	<input type = "submit" value = "ask" id = "submit">
+	<input type = "submit" class = "preview" value = "preview" id = "questionpreview"> 
+	</form>
+	{% if message %}
+	 	<p id = "error"> {{ message }} </p>
+	{% endif %}
+</div>
+</html>
+

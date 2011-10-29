@@ -1,0 +1,19 @@
+
+
+{% include "formcss.html" %}
+<div class = "form" id = "logform">
+	<form method = "POST" action = {% url views.logForm projectId %}>
+		<p>Content:</p>
+		<textarea name = "content">{{ content }}</textarea>
+		<p>Password:</p>
+		<input type = "password" name = "password" />
+		<br />
+		<br />
+		<input type = "submit" id = "submit"  value = "Submit" />
+	</form>
+	<a href = "#" id = "hidelogform">Hide</a>
+	{% if message %}
+		<p> {{ message }} </p>
+	{% endif %}
+</div>
+

@@ -1,0 +1,18 @@
+
+{% include 'formcss.html' %}
+<div  class = "form" id = "milestoneform">
+	<form method = "POST" action = {% url views.milestoneForm projectId %}>
+	<p>Description:</p><textarea name = "description"></textarea>
+	{% include 'date.html' %}
+	<p> Password: </p><input type = "password" name = "password"/>
+	<br />
+	<br />
+	<input type = "submit" id = "submit" value = "Add">
+	<a href = "#" id = "hidemilestone">Hide</a>
+	{% if message %}
+		<p id = "message">{{ message }}</p>
+	{% endif %}	
+	</form>
+</div>
+
+

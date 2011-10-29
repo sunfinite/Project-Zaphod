@@ -1,0 +1,78 @@
+<html>
+	<head>
+		<title>Project Zaphod - Projects</title>
+	<style type = "text/css">
+	body, table {
+		font-family: Arial;
+		font-size: 18pt;
+	}
+	a {
+		text-decoration: none;
+		color: black;
+	}
+	.project:hover {
+		background-color: #828282;
+	}
+	#main {
+		margin-top: 7%;
+		margin-left: 2%;
+	}
+
+	#projects-list {
+		width: 60%;
+		float: left;
+		background-color: #F5F5F5;
+	}
+	#log {
+		width: 40%;
+		float: right;
+	}
+	#log table {
+		font-size: 13pt;
+		padding-left: 7%;
+	}
+	#log p {
+		padding-left: 5%;
+		margin-top: 0px;
+	}
+	
+	.entry p {
+		margin: 3px;
+	}
+	.entry {
+		border-bottom: 1px #F8F8F8 solid;
+		padding-bottom: 15px;
+	}
+	.entry:hover {
+		background-color: #E7E7E7;
+	}
+	
+	</style>
+	</head>
+<body>
+{% load custom_filters %}
+{% load markup %}
+<div id = "main">
+	<div id = "projects-list">
+	<table>
+		{% for project in projects %}
+		<tr><td class = "project">
+			<a href = {% url views.renderProjectPage project.id %} >{{ project.id|decideProjectId }}. {{ project.title }}</a>
+		 </td></tr>
+		 {% endfor %}
+	 </table>
+	</div>
+	<div id = "log">
+	<p>Recent log entries</p>
+	<table>
+	{% for entry in log %}
+	  <tr><td class = "entry">
+		  <a href = {% url views.renderProjectPage entry.forProject.id %}>{{ entry.content|limit|markdown:'codehilite' }} in Project {{ entry.forProject.id|decideProjectId }}</a>
+	  </td></tr>
+	{% empty %}
+		None.
+	{% endfor %}
+	</table>
+	</div>
+</div>
+</body>

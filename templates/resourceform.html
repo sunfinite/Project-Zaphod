@@ -1,0 +1,68 @@
+{% if standalone %}
+<html>
+ 	<head>
+		<title>
+			Add Resource
+		</title>
+		{% include "formcss.html" %}
+		<script type = "text/javascript">
+			$(document).ready(function() {
+				$('#test').click(function() {
+					window.open($('#link' + $('#linkcount').attr('value')).attr('value'));
+				});
+
+				$('#addmorefiles').click(function() {
+				   var count = parseInt($('#filecount').attr('value'));
+				   var new_id = 'file' + (count + 1);
+				   $('#filecount').attr('value', (count + 1));
+				   $('#file_div').append(
+ '<br /><input type = "file" size = "27" class = "file" name =' + new_id + ' id = ' + new_id + '> '); 					
+				});
+				$('#addmorelinks').click(function() {
+				   var count = parseInt($('#linkcount').attr('value'));
+				   var new_id = 'link' + (count + 1);
+				   $('#linkcount').attr('value', (count + 1));
+				   $('#link_div').append(
+	'<br /><input type = "text"  class = "link" name =' + new_id + ' id = ' + new_id + '> '); 					
+				});
+
+			});
+		</script>
+
+
+	</head>
+{% endif %}
+
+	<div class = "form">
+	<form action = {%url views.resourceForm code class resourceId %} method = "POST"  enctype = "multipart/form-data">
+		<p>Upload File:</p> 
+		<div id = "file_div">
+		<input type = "file" name = "file1"  size = "27" id = "file1" class = "file">
+		</div>
+		<a href = "#" id = "addmorefiles" class = "links">Add more files</a>
+		<input type = "hidden" name = "filecount" value = "1" id = "filecount">
+		<br />
+		<br />
+		or 
+		<br />
+		<br />
+		<p>Link:</p> 
+		<div id = "link_div">
+		<input type = "text" name = "link1" id = "link1" class = "link" >
+		</div>
+		<a href = "#" id = "addmorelinks" class = "links">Add more links</a>
+		<a href = "#" class = "links" id = "test"> Test link </a>
+		<input type = "hidden" name = "linkcount" value = "1" id = "linkcount">
+		<br />
+		<br />
+		{% include "standalone.html" %}
+		<p>Password</p>
+		<input type = "password" name = "password">
+		<br />
+		<br />
+		<input type = "submit" value = "Submit" id = "submit">
+	{% if message %}
+	 	<p id = "error"> {{ message }} </p>
+	{% endif %}
+</form>
+</div>

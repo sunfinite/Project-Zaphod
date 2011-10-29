@@ -1,0 +1,20 @@
+{% load custom_filters %}
+<div class = "selectcontainer">
+<label for = "select">Date</label>
+<select name = "day">
+	{% for day in 0|days %}
+	<option id = {{day}} {% if day == assignment.submissionDate.day %} selected = "yes" {% endif %}> {{day}} </option>
+	{% endfor %}
+</select>
+<select name = "month">
+	{% for month in 0|months %}
+	<option id = {{month}} {% if month == assignment.submissionDate.month %} selected = "yes" {% endif %}> {{month}} </option>
+	{% endfor %}
+</select>
+<select name = "year">
+	{% for year in 0|years %}
+	<option id = {{year}} {% if year == assignment.submissionDate.year %} selected = "yes" {% endif %}> {{year}} </option>
+	{% endfor %}
+</select>
+</div>
+

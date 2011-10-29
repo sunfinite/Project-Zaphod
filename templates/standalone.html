@@ -1,0 +1,16 @@
+{% load custom_filters %}
+{% if standalone %}
+	<div class = "selectcontainer">
+		<label for = "select"> Related to </label>	
+		<select name = "class">
+			     {% for classObj in classes %}
+				 {% if classObj.id < 0 %}				     
+				 <option  id = {{ classObj.id }} value = {{ classObj.id }} {% if classObj.id == class %} selected = 'yes' {% endif %}> General  </option>
+				 {% else %}
+				 <option  id = {{ classObj.id }}  value = {{ classObj.id }} {% if classObj.id == class %} selected = 'yes' {% endif %}> {{ classObj.type|typeVal }} :  {{ classObj.date|date:"j/n" }} </option>
+				 {% endif %}
+			{% endfor %}
+		</select>
+	</div>
+{% endif %}
+

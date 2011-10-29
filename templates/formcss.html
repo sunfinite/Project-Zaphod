@@ -1,0 +1,64 @@
+<link rel = "stylesheet" type = "text/css" href = "/static/css/form.css" />
+<link rel = "stylesheet" type = "text/css" href = "/static/styles/default.css">
+<link rel = "stylesheet" type = "text/css" href = "/static/css/preview.css">
+<script type = "text/javascript" src = "/static/jquery-1.6.2.js"></script>
+<script type = "text/javascript" src = "/static/tabby/jquery.textarea.min.js"></script>
+<script type = "text/javascript">
+	$(document).ready(function() {
+		$('textarea').tabby();
+		
+
+		$('.preview').click(function() {
+					$.ajax({
+						type: 'POST',
+						url:/getpreview/,
+						data: {'preview': selectContent(this)},
+						success: function(data) { 
+							$('#previewdata').html(data);
+							boxEffect();
+						}
+					});
+
+					return false;
+				
+			});
+
+		function selectContent(obj) {
+			if($(obj).attr("id") == 'questionpreview')
+				return $('#questionarea').attr('value');
+			return $('#assignmentarea').attr('value');
+		}
+
+		function boxEffect() {
+			var maskWidth = $(window).width();
+			var maskHeight = $(document).height();
+			$('#mask').css({'width': maskWidth, 'height': maskHeight});
+
+			$('#mask').fadeTo('medium',0.42);
+
+			var self = $('#previewcontainer');
+			expWidth = self.width();
+			expHeight = self.height();
+
+			self.css({'left': maskWidth/2 - expWidth/2, 'top': $(document).height()/2 - expHeight/2});
+			self.fadeIn(840);				
+			
+			}
+
+		$('#close').click(function() {
+				$("#mask, #previewcontainer").fadeOut(300);
+			});
+
+		$('#close').hover(function() {
+				$(this).width(68);
+				$(this).height(25);
+				}, 
+			function() {
+				$(this).width(66);
+				$(this).height(22);
+			});
+
+		});
+</script>
+
+	

@@ -1,0 +1,246 @@
+<html>
+	<head>
+		<title>
+			Project Zaphod-{{class.forCourse.title}}	
+		</title>
+			{% include "formcss.html" %}
+			<style type = "text/css">
+				.thread { 
+					margin-top: 5%;
+					margin-left: 3%;
+				}
+
+				h3 { 
+					margin-bottom: 0px;
+				}
+
+				#questionform, #assignmentform, #resourceform {
+					display: none;
+				}
+
+				#questionhide, #assignmenthide, #resourcehide {
+					color: #303030;
+				}
+
+				.form {
+					float: left;
+				}
+
+				p, label {
+					font-size: 12pt;
+				}
+
+				.datetime, .replycount {
+					font-size: 9pt;
+				}
+				
+				.summary {
+					background-color: #A8A8A8;
+				}
+
+				.summary * {
+					padding-left: 3px;
+				}
+
+				.edit {
+					color: black;
+					font-size: 10pt;
+				}
+
+				.linkcontent {
+					width: 500px;
+				}
+
+				.linkcontainer td {
+					height: 42px;
+				}
+
+				.linkcontainer a {
+					text-decoration: none;
+					color: black;
+				}
+
+				.linkcontainer a:hover {
+					text-decoration: underline;
+				}
+				.codehilitetable {
+					float: left;
+				}
+				.submission {
+					font-size: 9pt;
+					width: 200px;
+				}
+			</style>
+			<script type = "text/javascript">
+			$(document).ready(function() {
+				// STUPID : All attempts to make these generic failed , Vim to the rescue.
+				$('#question').unbind('click').click(function() {
+					$('#questionform').animate({'opacity': 'toggle'});		
+					$(this).hide();
+				});
+
+				$('#questionhide').unbind('click').click(function() {
+					$('#questionform').hide('medium');
+					$('#question').show();
+				});	
+		
+				$('#assignment').unbind('click').click(function() {
+					$('#assignmentform').animate({'opacity': 'toggle'});		
+					$(this).hide();
+				});
+
+				$('#assignmenthide').unbind('click').click(function() {
+					$('#assignmentform').hide('medium');
+					$('#assignment').show();
+				});
+			
+				$('#resource').unbind('click').click(function() {
+					$('#resourceform').animate({'opacity': 'toggle'});		
+					$(this).hide();
+				});
+
+				$('#resourcehide').unbind('click').click(function() {
+					$('#resourceform').hide('medium');
+					$('#resource').show();
+				});
+			});
+		</script>
+
+	</head>
+	
+	<body>
+		{% load markup %}
+		{% load custom_filters %}
+		<div id = "mask"> </div>
+	<div id = "previewcontainer"><div id = "previewdata"> </div> <img src = "/static/images/close.gif" id = "close"/> </div>
+
+	<table class = "thread">
+			<tr><td>
+				<p class = "breadcrumbs"><a  href = "/"> Courses </a>&raquo;<a href = {% url views.renderCoursePage class.forCourse.code%}>{{class.forCourse.code}}</a></p>
+			</td></tr>
+
+			<tr><td class = "summary">
+				<h3> Summary: </h3>
+				<p>{{class.summary|markdown:'codehilite(force_linenos=True)'}}</p>
+			</td></tr>
+				<tr><td class = "datetime posted">
+						<em>Posted: </em>{{ class.datePosted }}				
+					{% if class.dateEdited %}
+					  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					  <em>Edited:</em> {{ class.dateEdited }}
+					
+					{% endif %}
+
+					  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href = {% url views.classForm class.forCourse.code class.id %} class = "edit"> Edit </a>
+				</td> </tr>
+		
+		
+			<tr> <td>
+			</td></tr> 
+			{% if message %}
+			  <p id = "message"> {{ message }} </p>
+			{% endif %}
+			<tr> <td>
+			<div id = "questions">
+				<h3> Questions: </h3>
+			</div>
+			</td></tr>
+			<tr> <td>
+			<table class = "linkcontainer">
+				{% for question in questions %}
+				<tr>
+					<td><a href = {% url views.renderQuestionPage class.forCourse.code question.id %}><p>{{ forloop.counter }}.</a></p></td><td class = "linkcontent"> <a href = {% url views.renderQuestionPage class.forCourse.code question.id %}>{{ question.content|limit|markdown:'codehilite(force_linenos=True)'}}</a></td><td><a href = {% url views.renderQuestionPage class.forCourse.code question.id %}><p class = "replycount">{{ question.replyCount }} replies<p></a></td>
+					
+				</tr></a>
+				{% empty %}
+				<tr><td>
+					<p> None. Everyone was busy exploring the altered states of their conscience, maybe? </p>
+				</td></tr>
+				{% endfor %}	
+			</table>
+
+			</td> </tr>
+			<tr> <td>
+					<button id = "question">Ask</button>
+			</tr></td>
+
+			<tr> <td>
+			<div id = "questionform">
+			{% include "questionform.html" with standalone=False code=class.forCourse.code class=class.id questionId=0 %}	
+			<a href = "javascript:void(0)" id = "questionhide"> Hide </a>
+				</div>
+			</td> </tr>
+			
+			<tr> <td>
+		<div id = "assignments">
+			<h3> Assignments: </h3>
+		</div>
+			</td></tr>
+			<tr> <td>
+			<table class = "linkcontainer">
+				{% for assignment in assignments %}
+				<tr>
+					<td><a href = {% url views.renderAssignmentPage class.forCourse.code assignment.id %}><p>{{ forloop.counter }}.</a></p></td><td class = "linkcontent"> <a href = {% url views.renderAssignmentPage class.forCourse.code assignment.id %}>{{ assignment.description|limit|markdown:'codehilite(force_linenos=True)'}}</a></td>			
+				
+					{% if assignment.submissionDate %} 
+					<td>
+						<a href = {% url views.renderAssignmentPage class.forCourse.code assignment.id %}>
+						<p class = "submission">Submission: {{ assignment.submissionDate|date:"j/n/Y" }}</p> 
+						</a>
+					</td> 			
+					{% endif %} 
+			
+			<td><a href = {% url views.renderAssignmentPage class.forCourse.code assignment.id %}><p class = "replycount">{{ assignment.replyCount }} replies<p></a></td>
+					</tr>
+	
+
+				{% empty %}
+				<tr><td>
+					<p> None. Have you ever done something from which you learnt nothing? </p>
+				</td></tr>
+				{% endfor %}	
+			</table>
+
+			</td> </tr>
+			<tr> <td>
+					<button id = "assignment">Start</button>
+			</tr></td>
+
+			<tr> <td>
+				<div id = "assignmentform">
+		{% include "assignmentform.html" with standalone=False code=class.forCourse.code class=class.id days=0|days months=0|months years=0|years assignmentId=0%}	
+			<a href = "javascript:void(0)" id = "assignmenthide"> Hide </a>
+			</div>
+			</td> </tr>
+		
+			<tr> <td>
+			<div id = "resources">
+				<h3> Resources: </h3>
+			</div>
+			<table class = "linkcontainer">	
+			{% for resource in resources %}
+			<tr><td class = "linkcontent"><a href = {% if resource.link %} {{ resource.link }} {% else %} {{ resource.file|fileLink }} {% endif %}>
+			{{ forloop.counter }}.{% if resource.link %} {{ resource.link }} {% else %} {{ resource.file|fileName }} {% endif %}</a></td></tr>
+			{% empty %}
+			<tr><td>
+					<p> None. Is the web deeper than the Universe? </p>
+				</td></tr>
+				{% endfor %}	
+			</table>
+
+		</div>
+			</td> </tr>
+			<tr> <td>
+					<button id = "resource">Add</button>
+			</tr></td>
+			<tr> <td>
+			<div id = "resourceform">
+			{% include "resourceform.html" with standalone=False code=class.forCourse.code class=class.id  resourceId=0%}	
+			<a href = "javascript:void(0)" id = "resourcehide"> Hide </a>
+			</div>
+			</td> </tr>
+		
+
+	<body>
+</html>

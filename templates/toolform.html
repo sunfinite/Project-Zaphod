@@ -1,0 +1,35 @@
+
+{% include 'formcss.html' %}
+<div  class = "form" id = "toolform">
+	<form method = "POST" action = {% url views.toolForm projectId %}>
+	<select name = "tool">
+	<option value = 0>Select a tool</option>
+	{% for tool in tools %}
+	<option value = {{ tool.id }}>{{tool.name}}</option>
+	{% empty %}
+	<option>No tools yet</option>
+	{% endfor %}
+	</select>
+	<a href = "#" id = "notthere">Not there?</a>
+	<div id = "newtool" style = "display: none">	
+	<p> Name:</p> <input name = "name"  type = "text" />
+	<p>Description:</p><textarea name = "description"></textarea>
+	</div>
+	<p> Password: </p><input type = "password" name = "password"/>
+	<br />
+	<br />
+	<input type = "submit" id = "submit" value = "Add">
+	<a href = "#" id = "hidetool">Hide</a>
+	{% if message %}
+		<p id = "message">{{ message }}</p>
+	{% endif %}
+	</form>
+</div>
+
+<script type = "text/javascript">
+	$(document).ready(function() { 
+		$('#notthere').click(function() { 
+			$('#newtool').animate({'opacity': 'toggle'});
+		});
+	});
+</script>

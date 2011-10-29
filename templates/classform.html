@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>
+			Project Zaphod - {{course.title}}
+		</title>
+		{% include "formcss.html" %}
+		</head>
+	<body>
+		<div id = "mask"> </div>
+		<div id = "previewcontainer"><div id = "previewdata"> </div> <img src = "/static/images/close.gif" id = "close"/> </div>
+		<div class = "form">
+		<form method = "POST" action = {%url views.classForm course.code classId %}>
+			<div class = "selectcontainer">
+			{% if classId == 0 %}
+				<label for="select">Type</label>
+				<select name = "type">
+					<option id = 'normal' value = 1>Theory</option>
+					<option id = 'lab' value = 2>Lab</option>
+					<option id = 'test' value = 3>Test/Exam</option>
+					<option id = 'other' value = 4>Other</option>
+				</select>			
+				</div>
+				<br />
+					 {% include "date.html" %}	
+			{% endif %}
+			 <p>Summary</p> 
+			 <textarea name = "summary" id = "textarea">{{ class.summary }}</textarea>
+			 <p>Password</p>
+			 <input type = "password" name = "password">
+			<br />
+			<br />
+			<input type = "submit" value = "submit" id = "submit"> 
+			<input type = "submit" id = "preview" value = "preview"> 
+			{% if message %}
+				<p id = "error"> {{ message }} </p>
+			{% endif %}
+		</form>
+	</div>
+	</body>
+</html>

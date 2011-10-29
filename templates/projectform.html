@@ -1,0 +1,25 @@
+<head>
+	<title> 
+		Project Zaphod - Project {{ project.id }}
+	</title>
+	{% include "formcss.html" %}
+</head>
+<div id = "mask"> </div>
+<div id = "previewcontainer"><div id = "previewdata"> </div> <img src = "/static/images/close.gif" id = "close"/> </div>
+
+<div class = "form">
+	<form method = "POST" action = {%url views.projectForm projectId %}>
+	<p> Title </p>
+	<textarea name = "abstract" id = "abstractarea">{{ project.title }}</textarea>
+	<p> Abstract </p>
+	<textarea name = "abstract" id = "abstractarea">{{ project.assignment }}</textarea>
+	<p>Password</p>
+	<input type = "password" name = "password">
+	<br />
+	<input type = "submit" value = {% if not assignment %} "start" {% else %} "done" {% endif %} id = "submit">
+	<input type = "submit" class = "preview" value = "preview" id = "assignmentpreview"> 
+	{% if message %}
+	<p id = "error">{{ message }}</p>
+	{% endif %}
+</form>
+</div>

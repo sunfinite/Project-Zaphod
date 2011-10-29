@@ -1,0 +1,124 @@
+<html>
+	<head>
+		<title>
+			Project Zaphod - {{course.title}} 
+		</title>
+	<link rel = "stylesheet" type = "text/css" href = "/static/css/course.css">
+	<script type = "text/javascript" src = "/static/jquery-1.6.2.js"></script>
+	<script type = "text/javascript" src = "/static/jqcollapse/jquery.collapse.js"></script>
+	<script type = "text/javascript" src = "/static/jqcollapse/jquery.easing.js"></script>
+	<script type = "text/javascript">
+		$(document).ready(function() {
+				$("#type").jqcollapse({slide: true, speed: 300, easing: 'easeOutCubic'});
+		});
+	</script>	
+	</head>
+
+	{% load custom_filters %}
+	{% load markup %}
+	<table id = "main">
+		<tr>
+		<td id = "list">
+			<a href = {%url views.classForm course.code 0 %} class = "addclass"> Add Class </a>
+			{% regroup classes|dictsort:'type' by type as classType %}
+			<ul id = "type">
+			{% for classList in classType %}		 
+				<li>
+				{{ classList.grouper|typeVal }}
+						{% regroup classList.list|dictsort:'date.month' by date.month as classMonth %}
+						<ul>
+						{% for classGroup in classMonth %}
+						   <li>
+						   {{ classGroup.list|firstObjDate|date:"M, Y" }}	      
+						      <ul>
+							      {% for class in classGroup.list %}  
+							 <li> <a href = {%url views.renderClassPage course.code class.id%} class = "links">{{class.date|date:"j"}}</a></li>
+							      {% endfor %}
+						      </ul>
+						    </li>
+						{% endfor %}
+						</ul>
+				</li>
+			{% endfor %}
+			</ul>
+			</td>
+			<td>
+			<table id = "content">
+			<tr> 
+				<td class = "tabcontainer">
+					<p class = "breadcrumbs"><a  href = "/"> Courses </a>&raquo;<a href = {% url views.renderCoursePage course.code%}>{{course.code}}</a></p>
+					<a href = "/projects/1729/" id = "readme" class = "tabs"> You might want to read this </a>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href = {% url views.courseForm course.id  %} id = "editcourse" class = "tabs"> Edit course details </a></td>
+			</tr>
+			<tr>
+			<td>
+				<div id = "questions" class = "widget">
+					<h4> Questions </h4>
+					<a class = "links" href = {% url views.questionForm course.code 0 0 %}>Don't be shy, ask.</a>
+					<div class = "widgetcontent">
+					<table>	
+					{% for question in questions %}
+					<tr><td class = "contentcontainer"><a class = "contentlinks" href = {%url views.renderQuestionPage course.code question.id %}>
+								{{ forloop.counter }}. {{ question.content|limit|markdown:'codehilite' }}</a></td><td class = "replycount"><a class = "contentlinks" href = {%url views.renderQuestionPage course.code question.id  %}>
+								{{ question.replyCount }} Replies</a></td></tr>
+					{% empty %}
+						<br />
+						<p class = "empty"> None. But it's never too late. </p>
+					{% endfor %}	
+					</table>
+					</div>
+				</div>
+
+			</td></tr>
+			<tr>
+				<td>
+				<div id = "assignments" class = "widget">
+					<h4> Assignments </h4>
+					<a class = "links" href = {% url views.assignmentForm course.code 0 0 %}>Don't be lazy, start.</a>
+					<div class = "widgetcontent">
+					<table>	
+					{% for assignment in assignments %}
+					<tr><td class = "contentcontainer"><a class = "contentlinks" href = {%url views.renderAssignmentPage course.code assignment.id %}>
+								{{ forloop.counter }}. {{ assignment.description|limit|markdown:'codehilite' }}</a></td>
+												<td class = "replycount"><a class = "contentlinks" href = {%url views.renderAssignmentPage course.code assignment.id  %}>
+								{{ assignment.replyCount }} Replies</a></td></tr>
+					{% if assignment.submissionDate %}
+					<tr><td class = "submission"><a class = "contentlinks" href = {%url views.renderAssignmentPage course.code assignment.id  %}>
+								Submission: {{ assignment.submissionDate|date:"j/n/Y" }}</a></td></tr>
+						{% endif %}
+
+
+					{% empty %}
+						<br />
+						<p class = "empty"> None. Come on, throw yourself a challenge and pull others in. </p>
+					{% endfor %}	
+					</table>
+					</div>
+					</div>
+				</td></tr>
+				<tr><td>
+				<div id = "resources" class = "widget">
+					<h4> Resources </h4>
+					<a class = "links" href = {% url views.resourceForm course.code 0 0 %}>Don't be selfish, add.</a>
+					<div class = "widgetcontent">
+					<table>	
+					{% for resource in resources %}
+					<tr><td class = "contentcontainer"><a class = "contentlinks" href = {% if resource.link %} {{ resource.link }} {% else %} {{ resource.file|fileLink }} {% endif %}>
+								{{ forloop.counter }}.{% if resource.link %} {{ resource.link }} {% else %} {{ resource.file|fileName }} {% endif %}</a></td></tr>
+					{% empty %}
+						<br />
+						<p class = "empty"> None. GIYF, but it  doesn't yet have a human touch.</p>
+					{% endfor %}	
+					</table>
+					</div>
+				</div>
+				</td></tr>
+			</table>
+			</div>
+		</div>
+	</td>
+	</tr>
+	</table>
+</html>
+
